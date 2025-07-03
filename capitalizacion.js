@@ -1,7 +1,7 @@
 document.getElementById("form-capitalizacion").addEventListener("submit", function (e) {
   e.preventDefault();
 
-  const montoInicial = parseFloat(document.getElementById("ahorro-monto").value);
+  const montoFinal = parseFloat(document.getElementById("ahorro-monto").value);
   const tasaAnual = parseFloat(document.getElementById("ahorro-tasa").value) / 100;
   const plazo = parseFloat(document.getElementById("ahorro-plazo").value);
   const unidadPlazo = document.getElementById("ahorro-plazo-unidad").value;
@@ -15,23 +15,27 @@ document.getElementById("form-capitalizacion").addEventListener("submit", functi
     anual: 1,
   };
 
-  const n = frecuenciaMap[frecuencia]; // Número de periodos por año
-  const totalPeriodos = unidadPlazo === "anios" ? plazo * n : plazo * (n / 12);
+  const n = frecuenciaMap[frecuencia];
+  const totalPeriodos = unidadPlazo === "anios" ? plazo * n : (plazo / 12) * n;
   const tasaPorPeriodo = tasaAnual / n;
 
+  // Cálculo de la cuota (anualidades ordinarias)
+  const cuota = (montoFinal * tasaPorPeriodo) / (Math.pow(1 + tasaPorPeriodo, totalPeriodos) - 1);
+
   let tablaHTML = "";
-  let capital = montoInicial;
+  let saldo = 0;
 
   for (let i = 1; i <= totalPeriodos; i++) {
-    const interes = montoInicial * tasaPorPeriodo;
-    capital += interes;
+    const interes = saldo * tasaPorPeriodo;
+    saldo += interes + cuota;
 
     tablaHTML += `
       <tr>
         <td>${i}</td>
-        <td>${montoInicial.toFixed(2)}</td>
+        <td>${saldo.toFixed(2)}</td>
         <td>${interes.toFixed(2)}</td>
-        <td>${capital.toFixed(2)}</td>
+        <td>${cuota.toFixed(2)}</td>
+        <td>${(interes + cuota).toFixed(2)}</td>
       </tr>`;
   }
 

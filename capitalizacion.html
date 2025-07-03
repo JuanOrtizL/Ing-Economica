@@ -21,15 +21,15 @@
 
   <main>
     <section id="capitalizacion" class="calculator-module">
-      <h2>Calculadora de Capitalización Simple</h2>
+      <h2>Calculadora de Capitalización con Cuotas</h2>
       <form id="form-capitalizacion">
         <div class="form-group">
-          <label for="ahorro-monto">Monto Inicial a Ahorrar (CI)</label>
-          <input type="number" id="ahorro-monto" step="any" placeholder="Ej: 500000" required/>
+          <label for="ahorro-monto">Monto Objetivo Final (FV)</label>
+          <input type="number" id="ahorro-monto" step="any" placeholder="Ej: 8500000" required/>
         </div>
         <div class="form-group">
           <label for="ahorro-tasa">Tasa de Interés Anual (%)</label>
-          <input type="number" id="ahorro-tasa" step="any" placeholder="Ej: 5" required/>
+          <input type="number" id="ahorro-tasa" step="any" placeholder="Ej: 8" required/>
         </div>
         <div class="form-group">
           <label for="ahorro-plazo">Plazo del Ahorro</label>
@@ -60,9 +60,10 @@
           <thead>
             <tr>
               <th>Periodo</th>
-              <th>Capital Inicial</th>
+              <th>Saldo</th>
               <th>Interés Ganado</th>
-              <th>Capital Acumulado</th>
+              <th>Cuota Aportada</th>
+              <th>Incremento Total</th>
             </tr>
           </thead>
           <tbody id="capitalizacion-body">
