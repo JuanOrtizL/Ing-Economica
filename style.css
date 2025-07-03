@@ -1,0 +1,523 @@
+:root {
+    /* Paleta de colores más claros */
+    --bg-color: #F0F2F5; /* Fondo principal gris muy claro */
+    --card-color: #FFFCEF; /* Fondo de las tarjetas/módulos y header a un amarillo crema muy claro */
+    --input-bg-color: #F8F8F8; /* Fondo de inputs/selects muy claro, casi blanco */
+    --text-color: #333333; /* Texto principal oscuro */
+    --label-color: #666666; /* Labels y texto secundario gris medio */
+    --accent-color: #4CDA9F; /* Verde menta vibrante para botones y acentos */
+    --hover-color: #38C172; /* Verde un poco más oscuro para hover de botones */
+    --border-color: #DDDDDD; /* Bordes sutiles gris claro */
+    --light-border-color: #EEEEEE; /* Borde aún más claro para algunos elementos */
+    --header-text-color: #4A4A4A; /* Color de texto específico para el header */
+    --negative-color: #DC3545; /* Rojo para valores negativos, si aplica (ej. pérdidas) */
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color); /* El color de fondo visible (gris claro) */
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    position: relative; /* Importante para posicionar el pseudo-elemento */
+    min-height: 100vh; /* Asegura que el body ocupe al menos toda la altura de la ventana */
+    overflow-x: hidden; /* Evita barras de desplazamiento horizontales innecesarias */
+}
+
+/* Pseudo-elemento para la imagen de fondo opacada */
+body::before {
+    content: ""; /* Obligatorio para pseudo-elementos */
+    position: fixed; /* La imagen se quedará "fija" en la ventana del navegador */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('images/fondo.png'); /* RUTA DE TU IMAGEN */
+    background-size: cover; /* Cubre todo el área sin dejar espacios */
+    background-position: center center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    opacity: 0.1; /* Ajusta este valor (0.1 a 0.3 es un buen rango) */
+    z-index: -1; /* Envía la imagen detrás de todo el contenido */
+    /* background-attachment: fixed; */
+}
+
+/* --- ESTILOS DEL ENCABEZADO (HEADER) --- */
+header {
+    width: 100%;
+    padding: 15px 40px;
+    background-color: var(--card-color);
+    display: flex;
+    justify-content: flex-start; /* Alinea el logo a la izquierda */
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    position: fixed; /* CAMBIADO de sticky a fixed */
+    top: 0;
+    left: 0; /* Asegura que empieza en el borde izquierdo */
+    z-index: 1000; /* Asegura que esté por encima de todo */
+    box-sizing: border-box;
+    border-bottom: 1px solid var(--light-border-color);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--header-text-color);
+}
+
+/* --- ESTILOS PARA EL LAYOUT PRINCIPAL (BARRA LATERAL + CONTENIDO) --- */
+/* Nuevo contenedor para el layout de dos columnas (sidebar + main content) */
+.main-layout-container {
+    display: flex; /* Habilitar flexbox para el diseño lateral */
+    margin-top: 70px; /* Espacio para el header fijo. Ajusta este valor si tu header tiene otra altura. */
+    min-height: calc(100vh - 70px); /* Asegura que el contenedor ocupe la altura restante */
+    position: relative; /* Para el posicionamiento de elementos internos si fuera necesario */
+}
+
+/* --- ESTILOS PARA LA BARRA DE NAVEGACIÓN VERTICAL --- */
+nav.vertical-nav { /* Aplicamos estilos a 'nav' solo si tiene la clase 'vertical-nav' */
+    width: 250px; /* Ancho de la barra lateral */
+    background-color: var(--card-color);
+    padding: 20px 0;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.08); /* Sombra hacia la derecha, adaptada a tu paleta */
+    display: flex;
+    flex-direction: column; /* Apilar los enlaces verticalmente */
+    gap: 10px; /* Espacio entre los enlaces */
+    position: fixed; /* Fija la barra lateral */
+    top: 70px; /* Debajo del header, ajusta según la altura de tu header */
+    left: 0;
+    bottom: 0; /* Extender hasta el final de la pantalla */
+    z-index: 999; /* Por debajo del header pero por encima del contenido principal */
+    overflow-y: auto; /* Permite scroll si hay muchos enlaces */
+    border-right: 1px solid var(--light-border-color); /* Borde sutil a la derecha */
+}
+
+nav.vertical-nav a { /* Estilos para los enlaces dentro de la nav vertical */
+    color: var(--label-color); /* Color por defecto */
+    text-decoration: none;
+    padding: 12px 20px; /* Padding interno para los enlaces */
+    font-size: 1.1em;
+    transition: background-color 0.3s ease, color 0.3s ease, border-left-color 0.3s ease;
+    border-left: 5px solid transparent; /* Borde izquierdo para el indicador activo/hover */
+    display: flex;
+    align-items: center;
+    font-weight: 500; /* Mantenemos el peso de tu nav anterior */
+}
+
+nav.vertical-nav a:hover {
+    background-color: var(--input-bg-color); /* Fondo ligeramente oscuro al pasar el mouse */
+    color: var(--accent-color); /* Texto de acento */
+    border-left-color: var(--accent-color); /* Borde de acento */
+}
+
+nav.vertical-nav a.active {
+    background-color: rgba(76, 218, 159, 0.1); /* Un toque del acento para el fondo activo */
+    color: var(--accent-color); /* Texto de acento */
+    font-weight: bold;
+    border-left-color: var(--accent-color); /* Borde de acento */
+}
+
+/* --- ESTILOS PARA EL CONTENIDO PRINCIPAL (MAIN) --- */
+main {
+    flex-grow: 1; /* Ocupa todo el espacio restante */
+    margin-left: 300px; /* Deja espacio para la barra lateral fija */
+    padding: 80px 20px; /* Mantenemos tu padding original */
+    box-sizing: border-box; /* Asegura que el padding no añada ancho extra */
+}
+
+/* --- MEDIA QUERIES PARA RESPONSIVIDAD (IMPORTANTES) --- */
+@media (max-width: 900px) {
+    /* En pantallas más pequeñas, el layout cambia a columna */
+    header {
+        position: static; /* El header deja de ser fijo */
+        padding-bottom: 0; /* Ajuste si tu padding era diferente */
+        justify-content: center; /* Centra el logo */
+    }
+
+    .main-layout-container {
+        flex-direction: column; /* Apila la navegación y el contenido */
+        margin-top: 0; /* Ya no hay header fijo encima */
+        min-height: auto; /* Permite que la altura se ajuste al contenido */
+    }
+
+    nav.vertical-nav { /* La barra lateral se convierte en una barra horizontal superior */
+        position: static; /* Deja de ser fija */
+        width: 100%; /* Ocupa todo el ancho */
+        height: auto; /* La altura se ajusta al contenido */
+        flex-direction: row; /* Los enlaces vuelven a ser horizontales */
+        justify-content: flex-start; /* Alinea los enlaces al inicio */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Sombra hacia abajo */
+        padding: 10px 0; /* Menos padding vertical */
+        gap: 0; /* Quita el espacio entre elementos, usa margin-right en los enlaces */
+        overflow-x: auto; /* Permite scroll horizontal si hay muchos ítems */
+        overflow-y: hidden; /* Oculta scroll vertical */
+        -webkit-overflow-scrolling: touch; /* Mejor scroll en iOS */
+        white-space: nowrap; /* Evita que los enlaces se rompan en varias líneas */
+        border-right: none; /* Elimina el borde de la derecha */
+        border-bottom: 1px solid var(--light-border-color); /* Añade un borde inferior */
+    }
+
+    nav.vertical-nav a {
+        padding: 10px 15px; /* Ajusta padding para enlaces horizontales */
+        border-left: none; /* Elimina el borde izquierdo */
+        border-bottom: 3px solid transparent; /* Usa un borde inferior para el activo */
+        margin-right: 15px; /* Espacio entre los enlaces horizontales */
+    }
+
+    nav.vertical-nav a:last-child {
+        margin-right: 0; /* No hay margen a la derecha en el último enlace */
+    }
+
+    nav.vertical-nav a:hover {
+        background-color: transparent; /* Fondo transparente en hover para horizontal */
+        border-left-color: transparent; /* Asegura que el borde izquierdo no aparezca */
+        border-bottom-color: var(--accent-color); /* Borde inferior al pasar el mouse */
+    }
+
+    nav.vertical-nav a.active {
+        background-color: transparent; /* Fondo transparente para el activo horizontal */
+        border-left-color: transparent; /* Asegura que el borde izquierdo no aparezca */
+        border-bottom-color: var(--accent-color); /* Borde inferior para el activo */
+        color: var(--accent-color); /* Mantén el color de acento */
+    }
+
+    main {
+        margin-left: 0; /* Main ya no necesita margen para la barra lateral */
+        padding-top: 20px; /* Ajusta el padding superior si es necesario */
+    }
+
+    /* Ajustes para los selectores de tipo de conversión que también usan toggle-btn */
+    .conversion-type-toggle {
+        grid-template-columns: 1fr; /* Apila los botones si la pantalla es muy pequeña */
+    }
+}
+
+
+/* --- ESTILOS DE CALCULADORA (LOS MANTENEMOS IGUAL) --- */
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: var(--text-color);
+    font-weight: 700;
+}
+
+h3 {
+    font-size: 1.3rem;
+    color: var(--text-color);
+    margin-bottom: 20px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.calculator-module {
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 20px; /* BORDES MÁS REDONDEADOS PARA MÓDULOS */
+    padding: 30px 35px;
+    margin-bottom: 40px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.form-group { margin-bottom: 20px; }
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 1.1em;
+    color: var(--label-color);
+}
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--input-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 9999px; /* ¡PARA HACERLOS PILL-SHAPED! */
+    box-sizing: border-box;
+    font-size: 1.1em;
+    color: var(--text-color);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.form-group input::placeholder { color: var(--label-color); }
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.2rem rgba(76, 218, 159, 0.25);
+    outline: none;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--accent-color);
+    color: #ffffff;
+    border: none;
+    border-radius: 9999px; /* ¡PARA HACERLOS PILL-SHAPED! */
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+button:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(76, 218, 159, 0.3);
+}
+
+.result-box {
+    margin-top: 25px;
+    padding: 25px;
+    background-color: var(--input-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 20px; /* BORDES MÁS REDONDEADOS PARA RESULTADOS */
+    font-size: 1.1em;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.result-box strong {
+    color: var(--accent-color);
+    font-size: 2.8em;
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.hidden { display: none; }
+
+.anualidad-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+.anualidad-controls button {
+    background-color: var(--input-bg-color);
+    border: 1px solid var(--border-color);
+    color: var(--label-color);
+    border-radius: 9999px; /* También los botones de control */
+}
+.anualidad-controls button.active {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #fff;
+}
+.anualidad-controls button:hover {
+    background-color: var(--accent-color);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(76, 218, 159, 0.2);
+}
+
+
+.calculator-form { padding-top: 20px; border-top: 1px solid var(--border-color); }
+
+.radio-group { background-color: var(--input-bg-color); padding: 10px; border-radius: 9999px; display: flex; gap: 20px; } /* Más redondeado para radio group */
+.radio-group label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: normal; color: var(--text-color); }
+.checkbox-group { display: flex; align-items: center; gap: 10px; }
+.checkbox-group input { width: auto; }
+.checkbox-group label { font-weight: normal; cursor: pointer; }
+
+/* NUEVOS ESTILOS PARA LA TABLA DE AMORTIZACIÓN */
+#tabla-container {
+    margin-top: 30px;
+}
+
+.amortization-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 1em;
+}
+
+.amortization-table thead tr {
+    background-color: var(--input-bg-color);
+    color: var(--label-color);
+    text-align: left;
+}
+
+.amortization-table th, .amortization-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.amortization-table th {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.amortization-table tbody tr:nth-child(even) {
+    background-color: var(--card-color);
+}
+.amortization-table tbody tr:nth-child(odd) {
+    background-color: var(--bg-color);
+}
+
+
+.amortization-table tbody tr:hover {
+    background-color: #E6F3FF; /* Un color suave para hover */
+}
+
+/* Alinear números a la derecha para mejor legibilidad */
+.amortization-table td:not(:first-child) {
+    text-align: right;
+    font-family: 'Roboto Mono', 'Courier New', Courier, monospace;
+}
+
+/* NUEVOS ESTILOS PARA AGRUPAR INPUT Y SELECT */
+.input-group {
+    display: flex;
+    gap: 10px;
+}
+
+.input-group input {
+    flex-grow: 1;
+}
+
+.input-group select {
+    width: 120px;
+    flex-shrink: 0;
+    border-radius: 9999px; /* Selector también píldora */
+}
+
+.results-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.results-container .result-box {
+    margin-top: 0;
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 20px; /* BORDES MÁS REDONDEADOS AQUÍ TAMBIÉN */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.results-container .result-box h3 {
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.results-container .result-box p {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: var(--accent-color);
+    margin: 0 0 10px 0;
+}
+
+.results-container .result-box small {
+    font-size: 0.9em;
+    color: var(--label-color);
+}
+
+/* Hacerlo de una sola columna en pantallas pequeñas */
+@media (max-width: 600px) {
+    .results-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =================================================================== */
+/* == ESTILOS MEJORADOS PARA EL MÓDULO DE REPARTOS PROPORCIONALES == */
+/* =================================================================== */
+
+/* Contenedor para una fila (tanto para Criterios como para Beneficiarios) */
+.criterio-row, .beneficiario-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 12px;
+}
+
+/* El input para el nombre del criterio debe ocupar el espacio sobrante. */
+.criterio-row .criterio-nombre {
+    flex-grow: 1;
+}
+
+/* --- Estilos para la Tabla de Beneficiarios (para alinear columnas) --- */
+
+/* La cabecera también es un 'flex container' para alinear sus títulos. */
+.beneficiario-row.header {
+    color: var(--label-color);
+    font-weight: bold;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+}
+
+/* Regla de ancho para la columna de Nombre (tanto en cabecera como en inputs) */
+.beneficiario-row .col-nombre {
+    flex: 2 1 180px;
+}
+
+/* Regla de ancho para las columnas de Valor (tanto en cabecera como en inputs) */
+.beneficiario-row .col-valor {
+    flex: 1 1 90px;
+}
+
+/* --- Estilos para los Botones de Añadir y Quitar --- */
+
+/* Botón para "Añadir Criterio" / "Añadir Beneficiario" */
+.btn-add {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    background-color: transparent;
+    border: 2px dashed var(--border-color);
+    color: var(--label-color);
+    border-radius: 9999px; /* Botones de añadir píldora */
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-add:hover {
+    background-color: rgba(76, 218, 159, 0.08);
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+/* Botón para eliminar (✖) */
+.remove-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--label-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1;
+    padding: 0;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease-in-out;
+}
+
+.remove-btn:hover {
+    background-color: var(--negative-color);
+    color: white;
+    border-color: var(--negative-color);
+    transform: scale(1.1);
+}
+
+/* Estilos específicos para el nuevo grupo de botones de tipo de conversión */
+.conversion-type-toggle {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Tres columnas para los tres botones */
+    gap: 10px; /* Espacio entre los botones */
+    margin-bottom: 20px; /* Espacio debajo del grupo */
+}
+
+/* En pantallas más pequeñas, los botones pueden apilarse */
+@media (max-width: 600px) {
+    .conversion-type-toggle {
+        grid-template-columns: 1fr; /* Una columna para que se apilen */
+    }
+}
